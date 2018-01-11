@@ -1,39 +1,17 @@
 package ie.gmit.sw;
 
-public class Poison extends Shingle {
-	
-	private int id;
-	private int poisonPill;
+public class Poison extends Shingle {//extends super class
+
 	
 	
 	public Poison(int p,int id){
-		
-		poisonPill = p;
-		this.id = id;
-		
-	
+		super(p,id);//call for super class constructor
 	}
 	
-	public Poison(){
+	public Poison(){//deafault constructor
 		
 	}
 	
-	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public int getPoisonPill() {
-		return poisonPill;
-	}
-	public void setPoisonPill(int poisonPill) {
-		this.poisonPill = poisonPill;
-	}
-
-
-	
+		
 	
 }

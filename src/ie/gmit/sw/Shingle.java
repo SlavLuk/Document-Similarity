@@ -1,30 +1,39 @@
 package ie.gmit.sw;
 
-public class Shingle{
-	
-	private int shingleHash;
-	private int id;
-	
-	public Shingle(int s,int docId){
-		this.shingleHash = s;
-		this.id = docId;
-	}
-	public Shingle(){
-		
-	}
-	
+public class Shingle implements Shinglable {//implement interface
 
-	public int getId() {
-		return id;
+	//declare instance variables
+	private int shingleHash;
+	private int docId;
+
+	public Shingle(int s, int id) {//two argument constructor
+		this.shingleHash = s;
+		this.docId = id;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+	public Shingle() {//default constructor
+
 	}
+	
+	//getters setters methods
+
+	@Override
 	public int getShingleHash() {
 		return shingleHash;
 	}
+
 	public void setShingleHash(int shingleHash) {
 		this.shingleHash = shingleHash;
+	}
+	
+	@Override
+	public int getDocId() {
+
+		return docId;
+	}
+
+	public void setDocId(int docId) {
+		this.docId = docId;
 	}
 
 }

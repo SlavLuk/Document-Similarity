@@ -4,8 +4,11 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
+ * This <code>Consumer</code> class creates thread pool and executes concurrently 
+ * calculating minhash value and resulting in finding Jaccard index of the two documents.
+ * 
  * @author Slav
- *
+ * @version 1.0
  */
 public class Consumer implements Runnable {
 
@@ -24,9 +27,12 @@ public class Consumer implements Runnable {
 
 	
 	/**
-	 * @param bq
-	 * @param rand
-	 * @param poolSize
+	 * Creates a new <code>Consumer</code> object based on the
+	 * parameters specified.
+	 * 
+	 * @param bq BlockingQueue interface thread safe
+	 * @param rand k numbers of random integers
+	 * @param poolSize thread pool size 
 	 */
 	public Consumer(BlockingQueue<Shinglable> bq, int rand, int poolSize) {
 
@@ -38,58 +44,60 @@ public class Consumer implements Runnable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 
 		int counter = 0;
 
 		try {
-
-			while (counter < 2) {// only 2 documents
-
-				Shinglable s = bq.take();// blocking method until an item
-											// becomes available
-
-				if (s instanceof Poison) {// check on last item in the queue
+			
+			// only 2 documents
+			while (counter < 2) {
+				
+				// blocking method until an item becomes available
+				Shinglable s = bq.take();
+											 
+				// check on last item in the queue
+				if (s instanceof Poison) {
 
 					counter++;
 
 				} else {
-
-					pool.execute(new Runnable() {// execute pool of threads for
-													// each shingle
-
+					
+					// execute pool of threads for each shingle
+					pool.execute(new Runnable() {
+												
 						@Override
 						public void run() {
-
-							synchronized (map) {// lets only one thread at the
-												// time to use map object
-
-								minHash = map.get(s.getDocId());// get list
-																// object or
-																// return null
+							
+							// lets only one thread at the time to use map object
+							synchronized (map) {
+								
+								// get list object or return null
+								minHash = map.get(s.getDocId());
 
 								if (minHash == null) {
 
-									// called only once for each document and
-									// initialise list with k number
-									// of Max integer value
-									minHash = new ArrayList<>(Collections.nCopies(k, Integer.MAX_VALUE));
 
-									map.put(s.getDocId(), minHash);
+								// called only once for each document 
+								minHash = new ArrayList<>(Collections.nCopies(k, Integer.MAX_VALUE));
+	
+								map.put(s.getDocId(), minHash);
 
 								}
 
-								// find the smallest for k number of random
-								// integers
-								for (int i = 0; i < minhashes.length; i++) {
+							// find the smallest for k number of random integers
+							for (int i = 0; i < minhashes.length; i++) {
 
-									int minValue = s.getShingleHash() ^ minhashes[i];
+								int minValue = s.getShingleHash() ^ minhashes[i];
 
-									// set the smallest number into list
-									if (minValue < minHash.get(i)) {
+								// set the smallest number into list
+								if (minValue < minHash.get(i)) {
 
-										minHash.set(i, minValue);
+									minHash.set(i, minValue);
 
 									}
 
@@ -107,25 +115,29 @@ public class Consumer implements Runnable {
 
 			} // while loop end
 
-			pool.shutdown();// pool orderly shutdown
-
-			while (!pool.isTerminated());//wait until all tasks have completed 
+						// pool orderly shutdown
+						pool.shutdown();
+						
+						//wait until all tasks have completed
+						while (!pool.isTerminated()); 
 				
+						//print out jaccard index
+						findJaccard(map.get(1), map.get(2));
 
-			findJaccard(map.get(1), map.get(2));//print out jaccard index
+			} catch (Exception e) {
 
-		} catch (Exception e) {
+						System.out.println(e.getMessage());
 
-			System.out.println(e.getMessage());
+			}
 
-		}
+		}// end run method
 
-	}// end run method
-
-	//find Jaccard index
+	
 	/**
-	 * @param a
-	 * @param b
+	 * Finds Jaccard index.
+	 * 
+	 * @param a list of document
+	 * @param b list of document
 	 */
 	private void findJaccard(List<Integer> a, List<Integer> b) {
 
@@ -136,13 +148,14 @@ public class Consumer implements Runnable {
 		float jaccard = ((float) intersection.size()) / ((k * 2) - ((float) intersection.size()));
 		
 		System.out.println("---------------------");
-		System.out.printf("Similarity : %.2f %n", jaccard * 100);
+		String index = String.format("%.2f", jaccard*100);		
+		System.out.println("Similarity : "+index+" %");
 		System.out.println("---------------------");
 	}
 
-	//initialise array with k number of random int 
+	
 	/**
-	 * 
+	 * Initialise array with k number of random integers. 
 	 */
 	private void init() {
 

@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Menu class to get user's inputs.
+ * Menu class  getting user's inputs.
  * 
  * @author Slav Lukyanov
  * @version 1.0
@@ -24,7 +24,8 @@ public class Menu {
 	private Launcher launch =new Launcher();
 	
 	/**
-	 * Default constructor.
+	 * Default constructor creates <code>Menu</code> object without
+	 * any parameters.
 	 */
 	public Menu (){
 		
@@ -32,7 +33,7 @@ public class Menu {
 	}
 	
 	/**
-	 * Display menu.
+	 * Display menu to user and read in user's inputs.
 	 */
 	public void show(){
 		

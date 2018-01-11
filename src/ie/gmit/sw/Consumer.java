@@ -3,9 +3,17 @@ package ie.gmit.sw;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * @author Slav
+ *
+ */
 public class Consumer implements Runnable {
 
-	// declare instance variables
+	 
+	/**
+	 * Declares instance variables.
+	 * 
+	 */
 	private BlockingQueue<Shinglable> bq;
 	private int[] minhashes;
 	private int k;
@@ -14,7 +22,12 @@ public class Consumer implements Runnable {
 	private List<Integer> minHash;
 	private Random random = null;
 
-	// three argument constructor
+	
+	/**
+	 * @param bq
+	 * @param rand
+	 * @param poolSize
+	 */
 	public Consumer(BlockingQueue<Shinglable> bq, int rand, int poolSize) {
 
 		this.bq = bq;
@@ -110,6 +123,10 @@ public class Consumer implements Runnable {
 	}// end run method
 
 	//find Jaccard index
+	/**
+	 * @param a
+	 * @param b
+	 */
 	private void findJaccard(List<Integer> a, List<Integer> b) {
 
 		List<Integer> intersection = new ArrayList<>(a);
@@ -117,12 +134,16 @@ public class Consumer implements Runnable {
 		intersection.retainAll(b);
 
 		float jaccard = ((float) intersection.size()) / ((k * 2) - ((float) intersection.size()));
-
+		
+		System.out.println("---------------------");
 		System.out.printf("Similarity : %.2f %n", jaccard * 100);
-
+		System.out.println("---------------------");
 	}
 
 	//initialise array with k number of random int 
+	/**
+	 * 
+	 */
 	private void init() {
 
 		random = new Random();

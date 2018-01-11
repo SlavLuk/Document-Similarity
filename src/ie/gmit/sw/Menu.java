@@ -3,25 +3,40 @@ package ie.gmit.sw;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Menu class to get user's inputs.
+ * 
+ * @author Slav Lukyanov
+ * @version 1.0
+ *
+ */
 public class Menu {
 
-	//declare variables
+	
+	/**
+	 * declare variables
+	 */
 	private Scanner scan ;
 	private String fileName;
 	private int shingleSize;
+	private int kRand;
 	private String option;
-	private Launcher runner =new Launcher();
+	private Launcher launch =new Launcher();
 	
-	public Menu (){//default constructor
+	/**
+	 * Default constructor.
+	 */
+	public Menu (){
 		
 		
 	}
 	
-
-	//menu method for user inputs
+	/**
+	 * Display menu.
+	 */
 	public void show(){
 		
-	try{//handle InputMismatchException exception
+	try{
 			
 			scan =  new Scanner(System.in);
 			
@@ -31,48 +46,61 @@ public class Menu {
 			
 			fileName = scan.next();
 	
-			runner.setFile1(validateFile(fileName));
+			launch.setFile1(validateFile(fileName));
 			
 			System.out.println("Please Enter a file name:");	
 			
 			fileName = scan.next();
 				
-			runner.setFile2(validateFile(fileName));
+			launch.setFile2(validateFile(fileName));
 			
-			System.out.println("Please Enter shingle size:");		
+			System.out.println("Please Enter shingle size:(0-9)");		
 		
 			shingleSize = scan.nextInt();
 			
-			runner.setShingleSize(shingleSize);
+			launch.setShingleSize(shingleSize);
+			
+			System.out.println("Please Enter a number for k random minhash:(200-500)");		
+			
+			kRand = scan.nextInt();
+			
+			launch.setkShingle(kRand);
+			
 			
 			System.out.println("Processing files...");
-			runner.launch();
+			launch.runThreads();
 			
 			System.out.println("Enter -1 to exit or 1 to continue");
 			option = scan.next();
 			
-			while(!option.equalsIgnoreCase("-1")){
+	while(!option.equalsIgnoreCase("-1")){
 				
 			System.out.println("Please Enter a file name:");
 			
 			fileName = scan.next();
 	
-			runner.setFile1(validateFile(fileName));
+			launch.setFile1(validateFile(fileName));
 			
 			System.out.println("Please Enter a file name:");	
 			
 			fileName = scan.next();
 				
-			runner.setFile2(validateFile(fileName));
+			launch.setFile2(validateFile(fileName));
 			
-			System.out.println("Please Enter shingle size:");		
+			System.out.println("Please Enter shingle size:(0-9)");		
 		
 			shingleSize = scan.nextInt();
 			
-			runner.setShingleSize(shingleSize);
+			launch.setShingleSize(shingleSize);
+			
+			System.out.println("Please Enter a number for k random minhash:(200-500)");		
+			
+			kRand = scan.nextInt();
+			
+			launch.setkShingle(kRand);
 			
 			System.out.println("Processing files...");
-			runner.launch();
+			launch.runThreads();
 			
 			System.out.println("Enter -1 to exit or 1 to continue");
 			option = scan.next();
@@ -86,7 +114,13 @@ public class Menu {
 			scan.close();
 	
 	}
-	//validate file name 
+	
+	/**
+	 * Validates file name.
+	 * 
+	 * @param file name of the specified file
+	 * @return file name of the file in current directory
+	 */
 	private String validateFile(String file){
 		
 		if(!file.startsWith("./")){

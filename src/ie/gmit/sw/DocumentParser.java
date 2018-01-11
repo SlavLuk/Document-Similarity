@@ -4,9 +4,20 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class DocumentParser implements Runnable {// implement runnable
+/**
+ * This is a text parser class for parsing a text file into shingles.
+ * 
+ * @author Slav Lukyanov
+ * @version 1.0
+ * 
+ */
+public class DocumentParser implements Runnable {
 
-	// declare instance variables
+	
+	/**
+	 * Declare instance variables.
+	 * 
+	 */
 	private BlockingQueue<Shinglable> blockQ;
 	private String fileName;
 	private int shignleSize;
@@ -14,6 +25,16 @@ public class DocumentParser implements Runnable {// implement runnable
 	private int docId;
 	private BufferedReader br = null;
 
+	
+	/**
+	 * Creates a new <code>DocumentParser</code> object based on the
+	 * parameters specified.
+	 * 
+	 * @param bq data structure BlockingQueue implementations are thread-safe
+	 * @param file file name
+	 * @param sSize shingle size
+	 * @param docId document id
+	 */
 	public DocumentParser(BlockingQueue<Shinglable> bq, String file, int sSize, int docId) {
 		this.blockQ = bq;
 		this.fileName = file;
@@ -21,9 +42,13 @@ public class DocumentParser implements Runnable {// implement runnable
 		this.docId = docId;
 
 	}
+	
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
-	public void run() {// callback method called by thread start
+	public void run() {
 
 		try {
 			// create buffer reader and open a file
@@ -73,6 +98,12 @@ public class DocumentParser implements Runnable {// implement runnable
 
 	}
 
+	/**
+	 * Inserts remaining items from buffer into BlockingQueue and marks the end of file by inserting Poison
+	 * object.
+	 * 
+	 * @throws InterruptedException if interrupted while waiting
+	 */
 	private void flushBuffer() throws InterruptedException {
 
 		while (buffer.size() > 0) {// check on buffer for more stuff
@@ -92,6 +123,12 @@ public class DocumentParser implements Runnable {// implement runnable
 		}
 	}
 
+	/**
+	 * Create a shingle object by specified size.
+	 * 
+	 * @return Shingle object
+	 * @throws InterruptedException  if interrupted while waiting
+	 */
 	private Shingle getNextShingle() throws InterruptedException {
 
 		String str = "";
@@ -120,6 +157,11 @@ public class DocumentParser implements Runnable {// implement runnable
 
 	}
 
+	/**
+	 * Converts a string token to lower case and inserts into buffer list.
+	 * 
+	 * @param tokens an array of strings 
+	 */
 	private void addToBuffer(String[] tokens) {
 
 		for (String s : tokens) {// traverse through array

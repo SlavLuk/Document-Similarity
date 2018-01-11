@@ -11,7 +11,7 @@ public class Launcher {
 	private int docId1 = 1;
 	private int docId2 = 2;
 	private int shingleSize;
-	private int kShingle = 300;// k number random shingles
+	private int kShingle ;
 	private int poolSize = 20;// pool threads
 	private int blockQSize = 200;// capacity for blocking queue
 	private BlockingQueue<Shinglable> blockQ = null;
@@ -21,7 +21,7 @@ public class Launcher {
 		this.blockQ = new LinkedBlockingQueue<>(getBlockQSize());
 	}
 
-	public void launch() {
+	public void runThreads() {
 
 		try {
 
